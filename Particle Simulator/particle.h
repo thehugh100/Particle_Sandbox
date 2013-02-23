@@ -3,7 +3,7 @@
 
 #define PART_EMPTY 0
 #define PART_FIRE 1
-
+#define PART_PROPANE 2
 
 
 

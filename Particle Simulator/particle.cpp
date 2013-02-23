@@ -74,6 +74,11 @@ void renderParticles() // main render function
 			case PART_FIRE:
 				simFire(x,y);
 				glColor3ub(255,32,32);
+				
+				break;
+			case PART_PROPANE:
+				simPropane(x,y);
+				glColor3ub(255,255,255);
 				break;
 			}
 					

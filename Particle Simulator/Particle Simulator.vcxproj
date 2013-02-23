@@ -82,6 +82,7 @@
     <None Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="interface.h" />
     <ClInclude Include="particle.h" />
     <ClInclude Include="screen.h" />
     <ClInclude Include="stdafx.h" />
@@ -89,6 +90,7 @@
     <ClInclude Include="update particles.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="interface.cpp" />
     <ClCompile Include="Particle Simulator.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="stdafx.cpp" />
