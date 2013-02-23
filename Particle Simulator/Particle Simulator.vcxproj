@@ -20,12 +20,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v110</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -39,8 +41,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle Simulator\include\GL;C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle Simulator\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle Simulator\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle_Sandbox\Particle Simulator\include;C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle Simulator\include\GL;C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle Simulator\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle_Sandbox\Particle Simulator\lib;C:\Users\Hugh\Desktop\Partical simulator\Particle simulator\Particle Simulator\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -84,11 +86,13 @@
     <ClInclude Include="screen.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="update particles.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Particle Simulator.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="update particles.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
