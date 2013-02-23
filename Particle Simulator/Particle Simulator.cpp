@@ -77,6 +77,7 @@ void handleGUI()
 
 void renderScene()
 {
+	glutReshapeWindow(640,480); // prevent window reshaping
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	 
 	//mouse pos
@@ -141,10 +142,26 @@ void drawButton(int x, int y, int w, int h, char *string,int type)
 	glColor3f(0.2,0.2,0.2);
 	glRasterPos2f(x+5,y+22);
 	sen(string);
+
+	if(selection.type == type)
+	{
+		glBegin(GL_QUADS);
+		
+		glColor3f(1,0,0);
+
+		glVertex2f(x,y);
+		glVertex2f(x+6,y);
+		glVertex2f(x+6,y+6);
+		glVertex2f(x,y+6);
+
+		glEnd();
+	}
+
 }
 
 void renderPallete()
 {
+	glutReshapeWindow(200,480);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	GetCursorPos(&p);
 	int xx = glutGet(GLUT_WINDOW_X);
@@ -168,6 +185,9 @@ void renderPallete()
 	drawButton(0,50,66,30,"Fire",PART_FIRE);
 	drawButton(66,50,66,30,"Wall",PART_WALL);
 	drawButton(66*2,50,66,30,"Propane",PART_PROPANE);
+
+	drawButton(0,80,66,30,"Napalm",PART_NAPALM);
+	drawButton(66,80,66,30,"Water",PART_WATER);
 
 	glutSwapBuffers();
 	glutPostRedisplay();

@@ -5,7 +5,8 @@
 #define PART_FIRE 1
 #define PART_PROPANE 2
 #define PART_WALL 3
-
+#define PART_NAPALM 4
+#define PART_WATER 5
 
 
 struct particle

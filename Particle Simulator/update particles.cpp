@@ -14,7 +14,32 @@ void explode(int x, int y, int radius, int intensity)
 		createParticle(x-xx,y-yy,PART_FIRE,40);
 	}
 }
+bool isInContactWith(int x, int y, int type)
+{
+	if(x > 0 && x < screen_width && y> 0 && y < screen_height)
+	{
+	if(partAt(x+1,y).type == type)
+		return 1;
+	if(partAt(x-1,y).type == type)
+		return 1;
 
+	if(partAt(x,y+1).type == type)
+		return 1;
+	if(partAt(x,y-1).type == type)
+		return 1;
+	// diagonal test
+	if(partAt(x+1,y+1).type == type)
+		return 1;
+	if(partAt(x-1,y+1).type == type)
+		return 1;
+
+	if(partAt(x+1,y+1).type == type)
+		return 1;
+	if(partAt(x-1,y-1).type == type)
+		return 1;
+	}
+	return 0;
+}
 bool canIgnite(int x, int y)
 {
 	// are we touching a fire particle
@@ -45,8 +70,100 @@ bool canIgnite(int x, int y)
 
 void simWall(int x, int y)
 {
-	createParticle(x,y,PART_WALL,100);
+	//createParticle(x,y,PART_WALL,100);
 }
+
+void simLiquid(int x, int y)
+{
+
+	int thisLiquid = partAt(x,y).type;
+
+	if(partAt(x,y+1).type == PART_EMPTY /*&& npartAt(x,y+1).type == PART_EMPTY*/ && y+2 < screen_height)
+	{
+		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x,y+1,thisLiquid,100);
+
+	}
+	else
+	{
+	
+
+	int rr = 1;
+	int ll = 1;
+
+	if(partAt(x-1,y).type == 0 && npartAt(x-1,y).type == 0)
+		ll = 0;
+	if(partAt(x+1,y).type == 0 && npartAt(x+1,y).type == 0)
+		rr = 0;
+
+	if(ll == 1 && rr == 0)
+	{
+		if(npartAt(x+1,y).type == 0)
+		{
+			if(rand()%2 == 0)
+			{
+		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x+1,y,thisLiquid,100);
+			}
+		}
+	}
+	if(ll == 0 && rr == 1)
+	{
+		if(npartAt(x-1,y).type == 0)
+		{
+			if(rand()%2 == 0)
+			{
+		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x-1,y,thisLiquid,100);
+			}
+		}
+	}
+
+	if(ll == 0 && rr == 0)
+	{
+		int r = rand()%3;
+		if(r == 0)
+		{
+			createParticle(x,y,PART_EMPTY,100);
+			createParticle(x-1,y,thisLiquid,100);
+		}
+		if(r == 1)
+		{
+			createParticle(x,y,PART_EMPTY,100);
+			createParticle(x+1,y,thisLiquid,100);
+		}
+	}
+
+	}
+	done:
+	int dn = 0;
+}
+
+void simNapalm(int x, int y)
+{
+	simLiquid(x,y);
+	if(canIgnite(x,y) == 1)
+	{
+		if(rand()%10 == 1)
+		{
+		explode(x,y,12,6);
+		createParticle(x,y,PART_EMPTY,10);
+		createParticle(x,y-1,PART_FIRE,50);
+		}
+		else
+			createParticle(x,y-1,PART_FIRE,100);
+	}
+}
+
+void simWater(int x, int y)
+{
+	simLiquid(x,y);
+	if(isInContactWith(x, y, PART_FIRE)==1)
+	{
+		createParticle(x,y,PART_EMPTY,100);
+	}
+}
+
 
 void simFire(int x, int y)
 {

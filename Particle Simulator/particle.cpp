@@ -54,9 +54,9 @@ void renderParticles() // main render function
 	float tx = 640.0/screen_width;
 	float ty = 480.0/screen_height;
 	glBegin(GL_QUADS);
-	for(int x = 0; x < screen_width; x++)
+	for(int y = 0; y < screen_height; y++)
 	{
-		for(int y = 0; y < screen_height; y++)
+		for(int x = 0; x < screen_width; x++)
 		{
 			float cx = tx*x;
 			float cy = ty*y;
@@ -83,6 +83,15 @@ void renderParticles() // main render function
 			case PART_WALL:
 				simWall(x,y);
 				glColor3ub(128,128,128);
+				break;
+
+			case PART_NAPALM:
+				simNapalm(x,y);
+				glColor3ub(128,128,0);
+				break;
+			case PART_WATER:
+				simWater(x,y);
+				glColor3ub(64,64,255);
 				break;
 			}
 					
