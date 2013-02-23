@@ -43,6 +43,11 @@ bool canIgnite(int x, int y)
 	return 0;
 }
 
+void simWall(int x, int y)
+{
+	createParticle(x,y,PART_WALL,100);
+}
+
 void simFire(int x, int y)
 {
 	int movY = rand()%2;

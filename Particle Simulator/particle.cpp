@@ -80,6 +80,10 @@ void renderParticles() // main render function
 				simPropane(x,y);
 				glColor3ub(255,255,255);
 				break;
+			case PART_WALL:
+				simWall(x,y);
+				glColor3ub(128,128,128);
+				break;
 			}
 					
 			}
