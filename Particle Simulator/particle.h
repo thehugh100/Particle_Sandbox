@@ -11,12 +11,13 @@
 struct particle
 {
 	int type;
+	int life;
 };
 
 void renderParticles();
 void clearParticleMap();
 void updateParticleMap();
-void createParticle(int x, int y, int type);
+void createParticle(int x, int y, int type, int life);
 particle partAt(int x, int y);
 particle npartAt(int x, int y);
 static particle pmap[640][480]; // main particle map for the screen

@@ -26,14 +26,14 @@ void changeSize(int w, int h)
     glEnable(GL_BLEND);
       //glEnable(GL_POLYGON_SMOOTH);
 }
-
+int x = 0;
 void renderScene()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	 
-	
-	createParticle(100,100,PART_FIRE);
-	createParticle(101,100,PART_FIRE);
+	x++;
+	//createParticle(x,100,PART_FIRE,100);
+	createParticle(101,100,PART_FIRE,50);
 
 	renderParticles();
 	updateParticleMap();

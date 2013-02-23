@@ -13,6 +13,7 @@ void updateParticleMap()
 		for(int y = 0; y < screen_height; y++)
 		{
 			pmap[x][y].type = nmap[x][y].type; // CAlled at the end of the frame, this is to replace the current particle map with the next
+			pmap[x][y].life = nmap[x][y].life;
 		}
 	}
 
@@ -34,21 +35,24 @@ void clearParticleMap()
 		{
 			pmap[i][ii].type = PART_EMPTY;
 			nmap[i][ii].type = PART_EMPTY;
+			pmap[i][ii].life = 0;
+			nmap[i][ii].life = 0;
 		}
 	}
 }
 
-void createParticle(int x, int y, int type)
+void createParticle(int x, int y, int type, int life)
 {
 	nmap[x][y].type = type;
+	nmap[x][y].life = life;
 }
 
 void renderParticles() // main render function
 {
 	
 	int currentParticleType = PART_EMPTY;
-	float tx = 640/400;
-	float ty = 480/300;
+	float tx = 640.0/screen_width;
+	float ty = 480.0/screen_height;
 	glBegin(GL_QUADS);
 	for(int x = 0; x < screen_width; x++)
 	{
