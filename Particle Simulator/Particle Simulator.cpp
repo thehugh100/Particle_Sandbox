@@ -14,6 +14,7 @@
 #include <fstream>
 #include "particle.h"
 #include "interface.h"
+#include <conio.h>
 using namespace std;
 
 
@@ -89,8 +90,8 @@ void renderScene()
 
 
 	
-	createParticle(100,100,PART_FIRE,50);
-	createParticle(150,100,PART_PROPANE,100);
+	//createParticle(100,100,PART_FIRE,50);
+	//createParticle(150,100,PART_PROPANE,100);
 
 	
 	renderParticles();
@@ -131,7 +132,17 @@ void drawButton(int x, int y, int w, int h, char *string,int type)
 		if(mousePressed == 1)
 		{
 			glColor3f(0.5,1,0.5);
+			if(type >=0 )
+			{
 			selection.type = type;
+			}
+			else
+			{
+				if(type == -4)
+				{
+					clearParticleMap();
+				}
+			}
 		}
 	}
 	glVertex2f(x,y);
@@ -188,6 +199,9 @@ void renderPallete()
 
 	drawButton(0,80,66,30,"Napalm",PART_NAPALM);
 	drawButton(66,80,66,30,"Water",PART_WATER);
+	drawButton(66*2,80,66,30,"Sand",PART_SAND);
+
+	drawButton(0,480-30,66,30,"Clear",-4);
 
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -241,6 +255,8 @@ int main(int argc, char **argv) {
 	
 	selection.life = 100;
 	selection.type = 1;
+
+	FreeConsole();
 
 	// enter GLUT event processing loop
 	glutMainLoop();

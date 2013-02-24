@@ -93,6 +93,10 @@ void renderParticles() // main render function
 				simWater(x,y);
 				glColor3ub(64,64,255);
 				break;
+			case PART_SAND:
+				simSand(x,y);
+				glColor3ub(255,255,130);
+				break;
 			}
 					
 			}

@@ -7,6 +7,7 @@
 #define PART_WALL 3
 #define PART_NAPALM 4
 #define PART_WATER 5
+#define PART_SAND 6
 
 
 struct particle
