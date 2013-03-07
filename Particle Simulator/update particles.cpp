@@ -82,11 +82,55 @@ void simWall(int x, int y)
 }
 
 
+
 void simPowder(int x, int y)
 {
 	int thisSolid = partAt(x,y).type;
+	//if(frame%2==0)
+	{
+	
+	float mp;
+	float lp;
+	float rp;
+	float up;
+	float dp;
 
-	if(partAt(x,y+1).type == PART_EMPTY /*&& npartAt(x,y+1).type == PART_EMPTY*/ && y+2 < screen_height)
+	mp = pressureAt(x,y);
+
+			
+	lp = pressureAt(x-1,y);
+	rp = pressureAt(x+1,y);
+	up = pressureAt(x,y-1);
+	dp = pressureAt(x,y+1);
+
+
+	if(lp>mp)
+	{
+		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x-1,y,thisSolid,100);
+	}
+	if(rp>mp)
+	{
+		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x+1,y,thisSolid,100);
+	}
+	if(up>mp)
+	{
+		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x,y-1,thisSolid,100);
+	}
+	if(dp>mp)
+	{
+		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x,y+1,thisSolid,100);
+	}
+	}
+	//else
+	
+	{
+	
+
+	if(partAt(x,y+1).type == PART_EMPTY  && y+2 < screen_height)
 	{
 		createParticle(x,y,PART_EMPTY,100);
 		createParticle(x,y+1,thisSolid,100);
@@ -96,77 +140,63 @@ void simPowder(int x, int y)
 	{
 	
 
-	int rr = 1;
-	int ll = 1;
-
-	if(partAt(x-1,y).type == 0 && npartAt(x-1,y).type == 0)
-		ll = 0;
-	if(partAt(x+1,y).type == 0 && npartAt(x+1,y).type == 0)
-		rr = 0;
-	if(partAt(x,y+1).type != 0)
-	{
-		if(ll == 1 && rr == 0)
+		int rr = 1;
+		int ll = 1;
+	
+		if(partAt(x-1,y).type == 0 && npartAt(x-1,y).type == 0)
+			ll = 0;
+		if(partAt(x+1,y).type == 0 && npartAt(x+1,y).type == 0)
+			rr = 0;
+		if(partAt(x,y+1).type != 0)
 		{
-			if(partAt(x+1,y).type == 0 && partAt(x+1,y+1).type == 0)
+			if(ll == 1 && rr == 0)
 			{
-				if(rand()%2 == 0)
+				if(partAt(x+1,y).type == 0 && partAt(x+1,y+1).type == 0)
+				{
+					if(rand()%2 == 0)
+					{
+						createParticle(x,y,PART_EMPTY,100);
+						createParticle(x+1,y,thisSolid,100);
+					}
+				}
+			}
+			if(ll == 0 && rr == 1)
+			{
+				if(partAt(x-1,y).type == 0 && partAt(x-1,y+1).type == 0)
+				{
+					if(rand()%2 == 0)
+					{
+						createParticle(x,y,PART_EMPTY,100);
+						createParticle(x-1,y,thisSolid,100);
+					}
+				}
+			}
+	
+			if(ll == 0 && rr == 0)
+			{
+				int r = rand()%2;
+				if(r==0)
+				{
+					createParticle(x,y,PART_EMPTY,100);
+					createParticle(x-1,y,thisSolid,100);
+				}
+				else
 				{
 					createParticle(x,y,PART_EMPTY,100);
 					createParticle(x+1,y,thisSolid,100);
 				}
 			}
 		}
-		if(ll == 0 && rr == 1)
-		{
-			if(partAt(x-1,y).type == 0 && partAt(x-1,y+1).type == 0)
-			{
-				if(rand()%2 == 0)
-				{
-					createParticle(x,y,PART_EMPTY,100);
-					createParticle(x-1,y,thisSolid,100);
-				}
-			}
-		}
-
-		if(ll == 0 && rr == 0)
-		{
-			int r = rand()%2;
-			if(r==0)
-			{
-				createParticle(x,y,PART_EMPTY,100);
-				createParticle(x-1,y,thisSolid,100);
-			}
-			else
-			{
-				createParticle(x,y,PART_EMPTY,100);
-				createParticle(x+1,y,thisSolid,100);
-			}
-		}
 	}
-	/*
-	if(ll == 0 && rr == 0)
-	{
-		int r = rand()%3;
-		if(r == 0)
-		{
-			createParticle(x,y,PART_EMPTY,100);
-			createParticle(x-1,y,thisSolid,100);
-		}
-		if(r == 1)
-		{
-			createParticle(x,y,PART_EMPTY,100);
-			createParticle(x+1,y,thisSolid,100);
-		}
+		done:
+		int dn = 0;
 	}
-	*/
-	}
-	done:
-	int dn = 0;
+	
 }
 
 void simLiquid(int x, int y)
 {
-
+	
 	int thisLiquid = partAt(x,y).type;
 
 	if(partAt(x,y+1).type == PART_EMPTY /*&& npartAt(x,y+1).type == PART_EMPTY*/ && y+2 < screen_height)
@@ -235,7 +265,7 @@ void simNapalm(int x, int y)
 	simLiquid(x,y);
 	if(canIgnite(x,y) == 1)
 	{
-		if(rand()%10 == 1)
+		if(rand()%9 == 1)
 		{
 		explode(x,y,5,2);
 		createParticle(x,y,PART_EMPTY,10);
@@ -243,8 +273,9 @@ void simNapalm(int x, int y)
 		}
 		else
 		{
-			createParticle(x,y-2,PART_FIRE,200);
-			createParticle(x,y+2,PART_FIRE,200);
+			createParticle(x,y-rand()%10,PART_FIRE,200);
+			createParticle(x,y,PART_FIRE,200);
+			createParticle(x,y+rand()%10,PART_FIRE,200);
 		}
 	}
 }
@@ -261,7 +292,15 @@ void simSand(int x, int y)
 {
 	simPowder(x,y);
 }
-
+void simGunPowder(int x, int y)
+{
+	simPowder(x,y);
+	if(canIgnite(x,y) == 1)
+	{
+		createParticle(x,y,0,100);
+		explode(x,y,20,20);
+	}
+}
 void simFire(int x, int y)
 {
 	int movY = rand()%2;
@@ -274,6 +313,7 @@ void simFire(int x, int y)
 	//life --;
 	if(life > 0)
 	{
+	newPressureMap[x][y]+=1;
 	if(isInContactWith(x,y,PART_WATER)==1)
 	{
 		createParticle(x,y,0,1);

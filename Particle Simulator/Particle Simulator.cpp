@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <math.h>
 #include <cmath>
+#include <ymath.h>
 #include <time.h>
 #include <fstream>
 #include "particle.h"
@@ -43,27 +44,78 @@ void changeSize2(int w, int h)
 int x = 0;
 POINT m;
 POINT p;
-void drawSelection()
+void drawSelection(int x, int y)
 {
 
 	particle pt = selection;
 	int ptt = pt.type;
 
-	createParticle(mousex/2,mousey/2,ptt,10);
+	createParticle(x/2,y/2,ptt,10);
 
-	createParticle((mousex/2)-1,(mousey/2),ptt,10);
-	createParticle((mousex/2)+1,(mousey/2),ptt,10);
-	createParticle((mousex/2),(mousey/2)-1,ptt,10);
-	createParticle((mousex/2),(mousey/2)+1,ptt,10);
+	createParticle((x/2)-1,(y/2),ptt,10);
+	createParticle((x/2)+1,(y/2),ptt,10);
+	createParticle((x/2),(y/2)-1,ptt,10);
+	createParticle((x/2),(y/2)+1,ptt,10);
 
 
 }
+
+
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
+void line_slow(int x1, int y1, int x2, int y2)
+{
+  int dx,dy,sdx,sdy,px,py,dxabs,dyabs,i;
+  float slope;
+
+  dx=x2-x1;      /* the horizontal distance of the line */
+  dy=y2-y1;      /* the vertical distance of the line */
+  dxabs=abs(dx);
+  dyabs=abs(dy);
+  sdx=sgn(dx);
+  sdy=(dy);
+  if (dxabs>=dyabs) /* the line is more horizontal than vertical */
+  {
+    slope=(float)dy / (float)dx;
+    for(i=0;i!=dx;i+=sdx)
+    {
+      px=i+x1;
+      py=slope*i+y1;
+	  drawSelection(px,py);
+    }
+  }
+  else /* the line is more vertical than horizontal */
+  {
+    slope=(float)dx / (float)dy;
+    for(i=0;i!=dy;i+=sdy)
+    {
+      px=slope*i+x1;
+      py=i+y1;
+     drawSelection(px,py);
+    }
+  }
+}
+
 void handleGUI()
 {
 	if(mousePressed == 1 )
 	{
 		if(mousex > 0 && mousex < 640 && mousey > 0 && mousey < 480)
-		drawSelection();
+		{
+
+			int x1 = mousex;
+			int y1 = mousey;
+
+			int x2 = oldMousex;
+			int y2 = oldMousey;
+
+			line_slow(x1,y1,x2,y2);
+
+			drawSelection(mousex,mousey);
+
+		}
 	}
 
 	if(GetAsyncKeyState('F') != 0)
@@ -78,9 +130,14 @@ void handleGUI()
 
 void renderScene()
 {
+	frame+=1;
 	glutReshapeWindow(640,480); // prevent window reshaping
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	 
+
+	oldMousex = mousex;
+	oldMousey = mousey;
+
 	//mouse pos
 	GetCursorPos(&m);
 	int xx = glutGet(GLUT_WINDOW_X);
@@ -92,10 +149,11 @@ void renderScene()
 	
 	//createParticle(100,100,PART_FIRE,50);
 	//createParticle(150,100,PART_PROPANE,100);
-
-	
+	//newPressureMap[100][100] = 10;
+	//updatePresureMap();
 	renderParticles();
 	updateParticleMap();
+
 
 	glutSwapBuffers();
 	glutPostRedisplay();
@@ -201,6 +259,8 @@ void renderPallete()
 	drawButton(66,80,66,30,"Water",PART_WATER);
 	drawButton(66*2,80,66,30,"Sand",PART_SAND);
 
+	drawButton(0,110,66,30,"Gun Pwd",PART_GUNPOWDER);
+
 	drawButton(0,480-30,66,30,"Clear",-4);
 
 	glutSwapBuffers();
@@ -256,8 +316,8 @@ int main(int argc, char **argv) {
 	selection.life = 100;
 	selection.type = 1;
 
-	FreeConsole();
-
+	//FreeConsole();
+	frame = 0;
 	// enter GLUT event processing loop
 	glutMainLoop();
 	return 1;

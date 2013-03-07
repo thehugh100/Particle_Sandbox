@@ -19,6 +19,50 @@ void updateParticleMap()
 
 }
 
+void updatePresureMap()
+{
+	float mp;
+	float lp;
+	float rp;
+	float up;
+	float dp;
+	for(int x = 0; x < screen_width; x++)
+	{
+		for(int y = 0; y < screen_height; y++)
+		{
+			mp = pressureMap[x][y];
+			
+			lp = pressureMap[x-1][y];
+			rp = pressureMap[x+1][y];
+			up = pressureMap[x][y-1];
+			dp = pressureMap[x][y+1];
+
+			if(lp>mp)
+			{
+				newPressureMap[x][y]+=0.1;
+				newPressureMap[x-1][y]-=0.1;
+			}
+			if(rp>mp)
+			{
+				newPressureMap[x][y]+=0.1;
+				newPressureMap[x+1][y]-=0.1;
+			}
+			if(up>mp)
+			{
+				newPressureMap[x][y]+=0.1;
+				newPressureMap[x][y-1]-=0.1;
+			}
+			if(dp>mp)
+			{
+				newPressureMap[x][y]+=0.1;
+				newPressureMap[x][y+1]-=0.1;
+			}
+			pressureMap[x][y] = newPressureMap[x][y];
+			//std::cout << pressureMap[x][y];
+		}
+	}
+}
+
 particle partAt(int x, int y)
 {
 	return pmap[x][y];
@@ -27,6 +71,16 @@ particle npartAt(int x, int y)
 {
 	return nmap[x][y];
 }
+
+float pressureAt(int x, int y)
+{
+	return pressureMap[x][y];
+}
+float newPressureAt(int x, int y)
+{
+	return newPressureMap[x][y];
+}
+
 void clearParticleMap()
 {
 	for(int i = 0; i < screen_width; i++)
@@ -43,8 +97,13 @@ void clearParticleMap()
 
 void createParticle(int x, int y, int type, int life)
 {
+	if(x>=0 && x <= 640)
+		if(y>0 && y < 490)
+		{
 	nmap[x][y].type = type;
 	nmap[x][y].life = life;
+	newPressureMap[x][y] = 0;
+		}
 }
 
 void renderParticles() // main render function
@@ -96,6 +155,10 @@ void renderParticles() // main render function
 			case PART_SAND:
 				simSand(x,y);
 				glColor3ub(255,255,130);
+				break;
+			case PART_GUNPOWDER:
+				simGunPowder(x,y);
+				glColor3ub(200,200,200);
 				break;
 			}
 					

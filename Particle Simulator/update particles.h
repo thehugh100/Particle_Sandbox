@@ -7,6 +7,7 @@ void simWall(int x, int y);
 void simNapalm(int x, int y);
 void simWater(int x, int y);
 void simSand(int x, int y);
+void simGunPowder(int x, int y);
 
 void simLiquid(int x, int y);
 void simPowder(int x, int y);
