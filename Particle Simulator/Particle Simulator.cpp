@@ -75,7 +75,7 @@ void line_slow(int x1, int y1, int x2, int y2)
   dxabs=abs(dx);
   dyabs=abs(dy);
   sdx=sgn(dx);
-  sdy=(dy);
+  sdy=sgn(dy);
   if (dxabs>=dyabs) /* the line is more horizontal than vertical */
   {
     slope=(float)dy / (float)dx;
@@ -112,6 +112,8 @@ void handleGUI()
 			int y2 = oldMousey;
 
 			line_slow(x1,y1,x2,y2);
+			
+
 
 			drawSelection(mousex,mousey);
 
