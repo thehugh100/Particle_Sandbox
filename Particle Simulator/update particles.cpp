@@ -4,6 +4,61 @@
 #include <iostream>
 #include <cstdlib>
 
+void createParticleSquareFill(int x1, int y1, int x2, int y2, int partType)
+{
+	if(x1 < x2 && y1 < y2)
+	{
+		for(int xx = 0; xx < (x2-x1); xx++)
+		{
+			for( int yy = 0; yy < (y2-y1);yy++)
+			{
+				createParticle(xx,yy,partType,100);
+			}
+		}
+	}
+}
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+void particleLine(int x1,int y1,int x2,int y2,int partType)
+{
+
+  int dx,dy,sdx,sdy,px,py,dxabs,dyabs,i;
+  float slope;
+
+  dx=x2-x1;      /* the horizontal distance of the line */
+  dy=y2-y1;      /* the vertical distance of the line */
+  dxabs=abs(dx);
+  dyabs=abs(dy);
+  sdx=sgn(dx);
+  sdy=sgn(dy);
+  if (dxabs>=dyabs) /* the line is more horizontal than vertical */
+  {
+    slope=(float)dy / (float)dx;
+    for(i=0;i!=dx;i+=sdx)
+    {
+      px=i+x1;
+      py=slope*i+y1;
+	  
+	  
+
+	  createParticle(px,py,partType,100);
+
+    }
+  }
+  else /* the line is more vertical than horizontal */
+  {
+    slope=(float)dx / (float)dy;
+    for(i=0;i!=dy;i+=sdy)
+    {
+      px=slope*i+x1;
+      py=i+y1;
+   
+	  createParticle(px,py,partType,100);
+    }
+  }
+}
+
 void explode(int x, int y, int radius, int intensity)
 {
 	for(int i = 0; i < intensity; i++)
@@ -14,6 +69,18 @@ void explode(int x, int y, int radius, int intensity)
 		createParticle(x-xx,y-yy,PART_FIRE,200);
 	}
 }
+
+void explodeTrail(int x, int y, int radius, int intensity)
+{
+	for(int i = 0; i < intensity; i++)
+	{
+		int xx = (rand()%radius)-rand()%radius;
+		int yy = (rand()%radius)-rand()%radius;
+		if(x-xx > 0 && x-xx < screen_width && y-yy > 0 && y-yy < screen_height)
+			particleLine(x,y,x-xx,y-yy,PART_FIRE);
+	}
+}
+
 bool isInContactWith(int x, int y, int type)
 {
 	if(x > 0 && x < screen_width && y> 0 && y < screen_height)
@@ -288,6 +355,15 @@ void simWater(int x, int y)
 		createParticle(x,y,PART_EMPTY,100);
 	}
 }
+void simNitro(int x, int y)
+{
+	simLiquid(x,y);
+	if(isInContactWith(x, y, PART_FIRE)==1)
+	{
+		explode(x,y,10,10);
+		explodeTrail(x,y,35,5);
+	}
+}
 void simSand(int x, int y)
 {
 	simPowder(x,y);
@@ -295,10 +371,13 @@ void simSand(int x, int y)
 void simGunPowder(int x, int y)
 {
 	simPowder(x,y);
-	if(canIgnite(x,y) == 1)
+	if(canIgnite(x,y) == 1 && rand()%10 == 0)
 	{
 		createParticle(x,y,0,100);
-		explode(x,y,20,20);
+		explode(x,y,2,4);
+		explodeTrail(x,y,20,20);
+		//particleLine(x,y,0,0,PART_FIRE);
+
 	}
 }
 void simFire(int x, int y)

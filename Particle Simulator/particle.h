@@ -9,6 +9,7 @@
 #define PART_WATER 5
 #define PART_SAND 6
 #define PART_GUNPOWDER 7
+#define PART_NITRO 8
 
 struct particle
 {

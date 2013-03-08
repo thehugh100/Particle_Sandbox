@@ -30,10 +30,10 @@
     <ClInclude Include="screen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="update particles.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="update particles.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

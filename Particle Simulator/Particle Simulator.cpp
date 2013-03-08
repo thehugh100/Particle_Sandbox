@@ -262,6 +262,7 @@ void renderPallete()
 	drawButton(66*2,80,66,30,"Sand",PART_SAND);
 
 	drawButton(0,110,66,30,"Gun Pwd",PART_GUNPOWDER);
+	drawButton(66,110,66,30,"Nitro",PART_NITRO);
 
 	drawButton(0,480-30,66,30,"Clear",-4);
 

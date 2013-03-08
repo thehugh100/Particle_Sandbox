@@ -160,6 +160,10 @@ void renderParticles() // main render function
 				simGunPowder(x,y);
 				glColor3ub(200,200,200);
 				break;
+			case PART_NITRO:
+				simNitro(x,y);
+				glColor3ub(25,230,25);
+				break;
 			}
 					
 			}
