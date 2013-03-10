@@ -4,7 +4,7 @@
 #include "GL/glut.h"
 #include "update particles.h"
 
-
+float hm = 0.999;
 void updateParticleMap()
 {
 
@@ -14,6 +14,28 @@ void updateParticleMap()
 		{
 			pmap[x][y].type = nmap[x][y].type; // CAlled at the end of the frame, this is to replace the current particle map with the next
 			pmap[x][y].life = nmap[x][y].life;
+			heatMap[x][y] = newHeatMap[x][y];
+
+			float h = heatAt(x,y);
+
+			float hl = heatAt(x+1,y);
+			float hr = heatAt(x-1,y);
+			float hu = heatAt(x,y+1);
+			float hd = heatAt(x,y-1);
+			
+			float hlu = heatAt(x+1,y-1);
+			float hru = heatAt(x-1,y-1);
+			float hld = heatAt(x+1,y+1);
+			float hrd = heatAt(x-1,y+1);
+			
+
+			
+			
+			newHeatMap[x][y] = ((hl + hr + hu + hd + hlu + hru + hld +hrd)/8.0f)*hm;
+			
+
+			//newHeatMap[x][y] -=0.5;
+			
 		}
 	}
 
@@ -71,14 +93,17 @@ particle npartAt(int x, int y)
 {
 	return nmap[x][y];
 }
-
-float pressureAt(int x, int y)
+void setHeat(int x, int y, float heat)
 {
-	return pressureMap[x][y];
+	newHeatMap[x][y] = heat;
 }
-float newPressureAt(int x, int y)
+float heatAt(int x, int y)
 {
-	return newPressureMap[x][y];
+	return heatMap[x][y];
+}
+float newHeatAt(int x, int y)
+{
+	return newHeatMap[x][y];
 }
 
 void clearParticleMap()
@@ -91,6 +116,8 @@ void clearParticleMap()
 			nmap[i][ii].type = PART_EMPTY;
 			pmap[i][ii].life = 0;
 			nmap[i][ii].life = 0;
+			heatMap[i][ii] = 0;
+			newHeatMap[i][ii] = 0;
 		}
 	}
 }
@@ -163,6 +190,10 @@ void renderParticles() // main render function
 			case PART_NITRO:
 				simNitro(x,y);
 				glColor3ub(25,230,25);
+				break;
+			case PART_STEAM:
+				simSteam(x,y);
+				glColor3ub(200,200,250);
 				break;
 			}
 					

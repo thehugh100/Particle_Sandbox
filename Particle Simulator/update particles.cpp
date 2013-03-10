@@ -154,44 +154,7 @@ void simPowder(int x, int y)
 {
 	int thisSolid = partAt(x,y).type;
 	//if(frame%2==0)
-	{
 	
-	float mp;
-	float lp;
-	float rp;
-	float up;
-	float dp;
-
-	mp = pressureAt(x,y);
-
-			
-	lp = pressureAt(x-1,y);
-	rp = pressureAt(x+1,y);
-	up = pressureAt(x,y-1);
-	dp = pressureAt(x,y+1);
-
-
-	if(lp>mp)
-	{
-		createParticle(x,y,PART_EMPTY,100);
-		createParticle(x-1,y,thisSolid,100);
-	}
-	if(rp>mp)
-	{
-		createParticle(x,y,PART_EMPTY,100);
-		createParticle(x+1,y,thisSolid,100);
-	}
-	if(up>mp)
-	{
-		createParticle(x,y,PART_EMPTY,100);
-		createParticle(x,y-1,thisSolid,100);
-	}
-	if(dp>mp)
-	{
-		createParticle(x,y,PART_EMPTY,100);
-		createParticle(x,y+1,thisSolid,100);
-	}
-	}
 	//else
 	
 	{
@@ -349,11 +312,26 @@ void simNapalm(int x, int y)
 
 void simWater(int x, int y)
 {
-	simLiquid(x,y);
-	if(isInContactWith(x, y, PART_FIRE)==1)
+	float h = heatAt(x,y);
+
+	if(h>100)
 	{
-		createParticle(x,y,PART_EMPTY,100);
+		createParticle(x,y+1,PART_STEAM,100);
+		setHeat(x,y,h-4); 
 	}
+	else
+	{
+		if(isInContactWith(x, y, PART_FIRE)==1)
+		{
+		createParticle(x,y,PART_STEAM,100);
+		setHeat(x,y,h-4); 
+		}
+		else
+		{
+			simLiquid(x,y);
+		}
+	}
+	
 }
 void simNitro(int x, int y)
 {
@@ -368,6 +346,9 @@ void simSand(int x, int y)
 {
 	simPowder(x,y);
 }
+
+
+
 void simGunPowder(int x, int y)
 {
 	simPowder(x,y);
@@ -392,7 +373,9 @@ void simFire(int x, int y)
 	//life --;
 	if(life > 0)
 	{
-	newPressureMap[x][y]+=1;
+		if(heatAt(x,y) < 1400)
+			setHeat(x,y,heatAt(x,y)+50);
+
 	if(isInContactWith(x,y,PART_WATER)==1)
 	{
 		createParticle(x,y,0,1);
@@ -437,8 +420,12 @@ void simFire(int x, int y)
 	
 
 }
-void simPropane(int x, int y)
+
+void simGas(int x, int y)
 {
+
+	int thisType = partAt(x,y).type;
+
 	int movY = rand()%3;
 	int movX = rand()%3;
 	
@@ -447,29 +434,39 @@ void simPropane(int x, int y)
 
 	int life = partAt(x,y).life;
 
-	if(canIgnite(x,y) != 1)
-	{
-	if(life > 0)
-	{
+	
+	
 	if(partAt(nx,ny).type == PART_EMPTY && npartAt(nx,ny).type == PART_EMPTY)
 	{
 
 		if(nx > 0 && nx < screen_width-1 && ny > 0 && ny < screen_height-1)
 		{
-		createParticle(nx,ny,PART_PROPANE,life);
+		createParticle(nx,ny,thisType,life);
 		createParticle(x,y,PART_EMPTY,life);
 		}
 	}
-	}
-	else
-	{
-		createParticle(x,y,PART_EMPTY,0);
-	}
-	}
-	else
-	{
-		//we can ignite.
+}
 
+
+
+void simSteam(int x, int y)
+{
+	float h = heatAt(x,y);
+	if(h < 20)
+	{
+		createParticle(x,y,PART_WATER,100);
+		setHeat(x,y,h-4);
+	}
+	else
+	{
+	simGas(x,y);
+	}
+}
+void simPropane(int x, int y)
+{
+	simGas(x,y);
+	if(canIgnite(x,y) == 1)
+	{
 		explode(x,y,8,10);
 	}
 }

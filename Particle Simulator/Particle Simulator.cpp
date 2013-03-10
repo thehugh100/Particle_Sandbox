@@ -147,14 +147,30 @@ void renderScene()
 	mousex = m.x-xx;
 	mousey = m.y-yy;
 
-
 	
-	//createParticle(100,100,PART_FIRE,50);
-	//createParticle(150,100,PART_PROPANE,100);
-	//newPressureMap[100][100] = 10;
-	//updatePresureMap();
+
+
 	renderParticles();
 	updateParticleMap();
+
+	
+	float tx = 640.0/320;
+	float ty = 480.0/240;
+	glBegin(GL_QUADS);
+	for(int y = 0; y < 240; y++)
+	{
+		for(int x = 0; x < 320; x++)
+		{
+			float cx = tx*x;
+			float cy = ty*y;
+			glColor4f(1,1,1,1.0/(1400.0/heatAt(x,y)));
+			glVertex2f(cx,cy);
+			glVertex2f(cx+tx,cy);
+			glVertex2f(cx+tx,cy+ty);
+			glVertex2f(cx,cy+ty);
+		}
+	}
+	glEnd();
 
 
 	glutSwapBuffers();
@@ -299,8 +315,8 @@ int main(int argc, char **argv) {
 
 
 	int window1 = glutCreateWindow("Partical Simulator");
-    //glEnable(GL_BLEND); //Enable alpha blending
-    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set the blend function
+    glEnable(GL_BLEND); //Enable alpha blending
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set the blend function
 	// register callbacks
 	glutDisplayFunc(renderScene);
 	glutReshapeFunc(changeSize);
